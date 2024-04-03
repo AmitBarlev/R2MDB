@@ -1,3 +1,23 @@
 redis:
   host: "127.0.0.1"
-  port: 6739
+  port: 6379
+
+omdb:
+  apiKey: "2dee71f0"
+  baseUrl: "http://www.omdbapi.com/"
+  responseTimeout: 5000
+  channelTimeout: 5000
+  readTimeout: 5000
+  writeTimeout: 5000
+
+spring:
+  data:
+    redis:
+      repositories:
+        enabled: false
+
+springdoc:
+  api-docs:
+    path: /v3/swagger-ui.html
+  swagger-ui:
+    path: /v3/api-docs
