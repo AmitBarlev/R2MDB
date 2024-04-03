@@ -52,6 +52,7 @@ public class OMDBClient implements ReactiveMovieDatabase {
     }
 
     private URI build(UriBuilder builder, MovieQuery query) {
+        //probably should be extracted to another class as it's basically a conversion
         UriBuilder fBuilder = builder
                 .queryParam("apikey", parameters.getApiKey());
 

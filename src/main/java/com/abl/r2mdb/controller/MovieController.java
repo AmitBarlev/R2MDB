@@ -1,4 +1,4 @@
-package com.abl.r2mdb.rest.controller;
+package com.abl.r2mdb.controller;
 
 import com.abl.r2mdb.model.MovieMetadata;
 import com.abl.r2mdb.model.MovieQuery;
