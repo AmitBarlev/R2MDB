@@ -3,6 +3,7 @@ package com.abl.r2mdb.service;
 import com.abl.r2mdb.model.MovieMetadata;
 import com.abl.r2mdb.model.MovieQuery;
 import com.abl.r2mdb.persistency.ReactiveRepository;
+import com.abl.r2mdb.persistency.ReactiveRepositoryWithCache;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,7 +23,7 @@ public class MovieServiceTest {
     private MovieService service;
 
     @Mock
-    private ReactiveRepository<MovieQuery, MovieMetadata> repository;
+    private ReactiveRepositoryWithCache<MovieQuery, MovieMetadata> reactiveRepository;
 
     private AutoCloseable closeable;
 
@@ -43,7 +44,7 @@ public class MovieServiceTest {
         MovieQuery query = new MovieQuery();
         MovieMetadata metadata = MovieMetadata.builder().build();
 
-        doReturn(Mono.just(metadata)).when(repository).findById(query);
+        doReturn(Mono.just(metadata)).when(reactiveRepository).findById(query);
 
         Mono<MovieMetadata> output = service.findById(query);
 
@@ -51,7 +52,7 @@ public class MovieServiceTest {
                 .expectNextCount(1)
                 .verifyComplete();
 
-        verify(repository).findById(query);
+        verify(reactiveRepository).findById(query);
     }
 
     @Test
@@ -59,7 +60,7 @@ public class MovieServiceTest {
         MovieQuery query = new MovieQuery();
         MovieMetadata metadata = MovieMetadata.builder().build();
 
-        doReturn(Mono.just(metadata)).when(repository).findByTitle(query);
+        doReturn(Mono.just(metadata)).when(reactiveRepository).findByTitle(query);
 
         Mono<MovieMetadata> output = service.findByTitle(query);
 
@@ -67,6 +68,6 @@ public class MovieServiceTest {
                 .expectNextCount(1)
                 .verifyComplete();
 
-        verify(repository).findByTitle(query);
+        verify(reactiveRepository).findByTitle(query);
     }
 }

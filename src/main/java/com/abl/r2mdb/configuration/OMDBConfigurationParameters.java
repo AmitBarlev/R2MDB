@@ -9,9 +9,8 @@ import org.springframework.context.annotation.Configuration;
 @Generated
 @Configuration
 @ConfigurationProperties(prefix = "omdb")
-public class OMDBParameters {
+public class OMDBConfigurationParameters {
 
-    private String apiKey;
     private String baseUrl;
     private int responseTimeout;
     private int channelTimeout;

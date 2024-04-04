@@ -19,7 +19,7 @@ public class OMDBConfigurationTest {
     private OMDBConfiguration configuration;
 
     @Mock
-    private OMDBParameters parameters;
+    private OMDBConfigurationParameters parameters;
 
     private AutoCloseable closeable;
 
@@ -39,14 +39,12 @@ public class OMDBConfigurationTest {
         doReturn(5000).when(parameters).getChannelTimeout();
         doReturn(4000).when(parameters).getResponseTimeout();
         doReturn("base").when(parameters).getBaseUrl();
-        doReturn("apiKey").when(parameters).getApiKey();
 
         WebClient client = configuration.omdbClient();
         assertNotNull(client);
 
         verify(parameters).getChannelTimeout();
         verify(parameters).getResponseTimeout();
-        verify(parameters).getApiKey();
         verify(parameters).getBaseUrl();
     }
 }
