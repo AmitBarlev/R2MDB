@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class OMDBConfiguration {
 
-    private final OMDBParameters parameters;
+    private final OMDBConfigurationParameters parameters;
 
     @Bean
     public WebClient omdbClient() {
@@ -32,7 +32,6 @@ public class OMDBConfiguration {
 
         return WebClient.builder()
                 .baseUrl(parameters.getBaseUrl())
-                .defaultHeader("apiKey", parameters.getApiKey())
                 .clientConnector(new ReactorClientHttpConnector(http))
                 .build();
     }

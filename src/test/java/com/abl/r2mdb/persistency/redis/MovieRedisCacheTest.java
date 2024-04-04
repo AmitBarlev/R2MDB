@@ -1,6 +1,7 @@
-package com.abl.r2mdb.persistency;
+package com.abl.r2mdb.persistency.redis;
 
 import com.abl.r2mdb.model.MovieMetadata;
+import com.abl.r2mdb.persistency.redis.MovieRedisCache;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -66,6 +67,20 @@ public class MovieRedisCacheTest {
         StepVerifier.create(output)
                 .expectNextCount(1)
                 .verifyComplete();
+
+        verify(client).getBucket(key);
+    }
+
+    @Test
+    public void save_sanity_monoWithMetadata() {
+        final String key = "key";
+        MovieMetadata metadata = MovieMetadata.builder().build();
+        RBucketReactive<MovieMetadata> bucket = mock(RBucketReactive.class);
+
+        doReturn(bucket).when(client).getBucket(key);
+        doReturn(Mono.empty()).when(bucket).set(metadata);
+
+        cache.put(key, metadata);
 
         verify(client).getBucket(key);
     }

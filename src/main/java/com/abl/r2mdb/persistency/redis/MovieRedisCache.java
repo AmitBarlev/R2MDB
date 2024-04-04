@@ -1,6 +1,7 @@
-package com.abl.r2mdb.persistency;
+package com.abl.r2mdb.persistency.redis;
 
 import com.abl.r2mdb.model.MovieMetadata;
+import com.abl.r2mdb.persistency.ReactiveCache;
 import lombok.RequiredArgsConstructor;
 import org.redisson.api.RedissonReactiveClient;
 import org.springframework.stereotype.Component;

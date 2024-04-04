@@ -8,31 +8,31 @@ import reactor.core.publisher.Mono;
 
 @Component
 @RequiredArgsConstructor
-public class ReactiveMovieRepository implements ReactiveRepository<MovieQuery, MovieMetadata> {
+public class ReactiveMovieRepository implements ReactiveRepositoryWithCache<MovieQuery, MovieMetadata> {
 
     private final ReactiveCache<String, MovieMetadata> cache;
-    private final ReactiveMovieDatabase database;
+    private final ReactiveRepository<MovieQuery, MovieMetadata> repository;
 
     @Override
     public Mono<MovieMetadata> findById(MovieQuery query) {
         return cache.get(query.getId())
-                .switchIfEmpty(doOnEmpty(query));
+                .switchIfEmpty(Mono.defer(
+                        () -> repository.findById(query))
+                        .doOnSuccess(this::save)
+                );
     }
 
     @Override
     public Mono<MovieMetadata> findByTitle(MovieQuery query) {
         return cache.get(query.getTitle())
-                .switchIfEmpty(doOnEmpty(query));
+                .switchIfEmpty(Mono.defer(
+                        () -> repository.findByTitle(query)
+                                .doOnSuccess(this::save)));
     }
 
     @Override
     public void save(MovieMetadata metadata) {
         cache.put(metadata.getImdbID(), metadata);
         cache.put(metadata.getTitle(), metadata);
-    }
-
-    private Mono<MovieMetadata> doOnEmpty(MovieQuery query) {
-        return database.find(query)
-                .doOnSuccess(this::save);
     }
 }

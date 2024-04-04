@@ -1,8 +1,8 @@
-package com.abl.r2mdb.persistency;
+package com.abl.r2mdb.persistency.omdb;
 
 import com.abl.r2mdb.model.MovieMetadata;
 import com.abl.r2mdb.model.MovieQuery;
-import com.abl.r2mdb.model.Plot;
+import com.abl.r2mdb.persistency.omdb.OMDBClient;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,7 +14,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import java.net.URI;
 import java.util.function.Function;
 
 import static org.mockito.Mockito.*;
@@ -24,6 +23,8 @@ public class OMDBClientTest {
     @InjectMocks
     private OMDBClient omdbClient;
 
+    @Mock
+    private OMDBClientParameters parameters;
     @Mock
     private WebClient client;
 
@@ -41,7 +42,7 @@ public class OMDBClientTest {
     }
 
     @Test
-    public void find_sanity_emptyMono() {
+    public void findById_sanity_emptyMono() {
         WebClient.RequestHeadersUriSpec<?> get = mock(WebClient.RequestHeadersUriSpec.class);
         WebClient.RequestHeadersSpec<?> uri = mock(WebClient.RequestHeadersUriSpec.class);
         WebClient.ResponseSpec retrieve = mock(WebClient.ResponseSpec.class);
@@ -51,7 +52,7 @@ public class OMDBClientTest {
         doReturn(retrieve).when(uri).retrieve();
         doReturn(Mono.empty()).when(retrieve).bodyToMono(MovieMetadata.class);
 
-        Mono<MovieMetadata> metadata = omdbClient.find(new MovieQuery());
+        Mono<MovieMetadata> metadata = omdbClient.findById(new MovieQuery());
 
         StepVerifier.create(metadata)
                 .expectNextCount(0)
@@ -64,7 +65,7 @@ public class OMDBClientTest {
     }
 
     @Test
-    public void find_sanity_monoWithMetadata() {
+    public void findByTitle_sanity_monoWithMetadata() {
         WebClient.RequestHeadersUriSpec<?> get = mock(WebClient.RequestHeadersUriSpec.class);
         WebClient.RequestHeadersSpec<?> uri = mock(WebClient.RequestHeadersUriSpec.class);
         WebClient.ResponseSpec retrieve = mock(WebClient.ResponseSpec.class);
@@ -74,7 +75,7 @@ public class OMDBClientTest {
         doReturn(retrieve).when(uri).retrieve();
         doReturn(Mono.just(MovieMetadata.builder().build())).when(retrieve).bodyToMono(MovieMetadata.class);
 
-        Mono<MovieMetadata> metadata = omdbClient.find(new MovieQuery());
+        Mono<MovieMetadata> metadata = omdbClient.findByTitle(new MovieQuery());
 
         StepVerifier.create(metadata)
                 .expectNextCount(1)
