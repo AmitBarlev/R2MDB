@@ -1,4 +1,4 @@
-package com.abl.r2mdb.persistency;
+package com.abl.r2mdb.configuration;
 
 import lombok.Data;
 import lombok.Generated;
