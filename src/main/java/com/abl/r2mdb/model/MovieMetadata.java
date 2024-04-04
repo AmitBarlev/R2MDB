@@ -1,10 +1,11 @@
 package com.abl.r2mdb.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 @Data
+@Builder
+@Generated
 @RequiredArgsConstructor
 public class MovieMetadata {
     @JsonProperty("Title")

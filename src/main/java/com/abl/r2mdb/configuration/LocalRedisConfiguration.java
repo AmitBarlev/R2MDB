@@ -2,6 +2,7 @@ package com.abl.r2mdb.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
 import org.redisson.api.RedissonReactiveClient;
@@ -19,8 +20,13 @@ public class LocalRedisConfiguration {
 
     @Bean
     public RedissonReactiveClient redisClient() {
-        String connection = String.format("redis://%s:%s", parameters.getHost(), parameters.getPort());
+        String host = parameters.getHost();
+        int port = parameters.getPort();
 
+        if (StringUtils.isBlank(host) || 0 == port)
+            throw new IllegalArgumentException("Redis parameters are invalid");
+
+        String connection = String.format("redis://%s:%s", host, port);
         Config config = new Config();
         config.useSingleServer()
                 .setAddress(connection);
